@@ -21,6 +21,7 @@ var CountUp = function(target, startVal, endVal, decimals, duration, options) {
 	self.options = {
 		useEasing: true, // toggle easing
 		useGrouping: true, // 1,000,000 vs 1000000
+        groupLength: 1000, // 1,000,000 vs 100,0000
 		separator: ',', // character to use as a separator
 		decimal: '.', // character to use as a decimal
 		easingFn: easeOutExpo, // optional custom easing function, default is Robert Penner's easeOutExpo
@@ -82,7 +83,7 @@ var CountUp = function(target, startVal, endVal, decimals, duration, options) {
 		if (self.options.useGrouping) {
 			x3 = '';
 			for (i = 0, len = x1.length; i < len; ++i) {
-				if (i !== 0 && ((i % 3) === 0)) {
+				if (i !== 0 && ((i % self.options.groupLength) === 0)) {
 					x3 = self.options.separator + x3;
 				}
 				x3 = x1[len - i - 1] + x3;
