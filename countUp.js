@@ -21,7 +21,7 @@ var CountUp = function(target, startVal, endVal, decimals, duration, options) {
 	self.options = {
 		useEasing: true, // toggle easing
 		useGrouping: true, // 1,000,000 vs 1000000
-        groupLength: 1000, // 1,000,000 vs 100,0000
+        groupLength: 3, // 1,000,000 vs 100,0000
 		separator: ',', // character to use as a separator
 		decimal: '.', // character to use as a decimal
 		easingFn: easeOutExpo, // optional custom easing function, default is Robert Penner's easeOutExpo
@@ -118,6 +118,9 @@ var CountUp = function(target, startVal, endVal, decimals, duration, options) {
 			self.error = '[CountUp] target is null or undefined'
 			return false;
 		}
+        if (typeof self.d === 'function') {
+            self.renderMode = true
+        }
 		self.startVal = Number(startVal);
 		self.endVal = Number(endVal);
 		// error checks
@@ -139,16 +142,19 @@ var CountUp = function(target, startVal, endVal, decimals, duration, options) {
 	// Print value to target
 	self.printValue = function(value) {
 		var result = self.options.formattingFn(value);
-
-		if (self.d.tagName === 'INPUT') {
-			this.d.value = result;
-		}
-		else if (self.d.tagName === 'text' || self.d.tagName === 'tspan') {
-			this.d.textContent = result;
-		}
-		else {
-			this.d.innerHTML = result;
-		}
+        if (self.renderMode) {
+            self.d(result, value)
+        } else {
+            if (self.d.tagName === 'INPUT') {
+                this.d.value = result;
+            }
+            else if (self.d.tagName === 'text' || self.d.tagName === 'tspan') {
+                this.d.textContent = result;
+            }
+            else {
+                this.d.innerHTML = result;
+            }
+        }
 	};
 
 	self.count = function(timestamp) {
